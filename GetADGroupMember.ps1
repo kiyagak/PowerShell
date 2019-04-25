@@ -11,7 +11,7 @@ Function: 	List an Active Directory security group's member users and
 function OutputGroupMembers {
  param( [string[]]$securityGroups )
 	# loop to iterate through each Active Directory security group
-	for each ($group in $securityGroups) {
+	foreach ($group in $securityGroups) {
 		# each security group will have its own output .CSV file,
 		# stored on the user's desktop
 		
