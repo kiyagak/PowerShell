@@ -95,8 +95,8 @@ Get-AzureADUserLicenseDetail -objectid $UserUPN
 # create dynamic Azure AD groups
 # https://helloitsliam.com/2021/01/25/note-to-self-powershell-create-dynamic-azure-ad-group/
 # https://stackoverflow.com/questions/62030759/how-to-create-dynamic-groups-in-azure-ad-through-powershell
-
-
+# https://docs.microsoft.com/en-us/answers/questions/329316/azuread-module-new-azureadmsgroup-issue.html
+# -MembershipRuleProcessingState must be set to "On"
 
 Remove-Module AzureAD -ErrorAction SilentlyContinue
 Install-Module -Name AzureADPreview -AllowClobber -Force
@@ -116,10 +116,7 @@ $CloudDevices = New-AzureADMSGroup `
     -MailNickname "$($CloudGroupMailName)" `
     -GroupTypes "DynamicMembership" `
     -MembershipRule "$($CloudGroupQuery)" `
-    -MembershipRuleProcessingState "Paused"
-
-# Set the Dynamic Azure Active Directory Group to Sync
-Set-AzureADMSGroup -Id $CloudDevices.Id -MembershipRuleProcessingState "Paused"
+    -membershipRuleProcessingState "On"
 
 # Create a System Administrator Security Group
 $SystemGroupName = "IT System Administrators"
@@ -134,10 +131,7 @@ $SystemDevices = New-AzureADMSGroup `
     -MailNickname "$($SystemGroupMailName)" `
     -GroupTypes "DynamicMembership" `
     -MembershipRule "$($SystemGroupQuery)" `
-    -MembershipRuleProcessingState "Paused"
-
-# Set the Dynamic Azure Active Directory Group to Sync
-Set-AzureADMSGroup -Id $SystemDevices.Id -MembershipRuleProcessingState "Paused"
+    -membershipRuleProcessingState "On"
 
 # Create a IT Lab Administrator Security Group
 New-AzureADGroup -DisplayName "IT Lab Administrators" -Description "Contoso IT Lab administrators" -MailEnabled $false -SecurityEnabled $true -MailNickName "ITLabAdministrators"
